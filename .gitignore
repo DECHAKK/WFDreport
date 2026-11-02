@@ -1,6 +1,6 @@
 # Vercel / Node runtime (repo root only — subfolders keep their own rules)
 node_modules/
-.vercel/
+.vercel
 
 # Never commit certificates, client option files or database dumps
 *.pem
@@ -8,5 +8,11 @@ node_modules/
 database/exports/
 insurance-landing-demo/database/exports/
 
+# Local environment files (frontend/.env.production is intentionally tracked)
+.env
+.env.local
+.env*.local
+
 # macOS
 .DS_Store
+
