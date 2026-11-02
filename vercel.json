@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "framework": null,
-  "installCommand": "npm install && cd insurance-landing-demo/frontend && npm ci",
+  "installCommand": "npm install --include=dev && cd insurance-landing-demo/frontend && npm ci --include=dev",
   "buildCommand": "cd insurance-landing-demo/frontend && npm run build",
   "outputDirectory": "insurance-landing-demo/frontend/dist",
   "functions": {

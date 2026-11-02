@@ -6,10 +6,6 @@
   "engines": {
     "node": "22.x"
   },
-  "scripts": {
-    "build": "cd insurance-landing-demo/frontend && npm ci && npm run build",
-    "vercel-build": "cd insurance-landing-demo/frontend && npm ci && npm run build"
-  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
