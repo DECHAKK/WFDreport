@@ -1,4 +1,14 @@
-import { Plan, Lead, LeadSubmissionRequest, ApiResponse, LeadStatus, InsuranceRates } from '../types';
+import {
+  Plan,
+  Lead,
+  LeadSubmissionRequest,
+  ApiResponse,
+  LeadStatus,
+  InsuranceRates,
+  IndexLinkedPlansResponse,
+  IndexLinkedQuote,
+  IndexLinkedQuoteRequest,
+} from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
 
@@ -63,6 +73,32 @@ class ApiClient {
     const res = await this.request<InsuranceRates>('/rates');
     if (!res.data) {
       throw new Error('ไม่พบข้อมูลอัตราเบี้ยจากฐานข้อมูล');
+    }
+    return res.data;
+  }
+
+  /**
+   * Fetch the index linked savings plans (25/7 and 25/15) with their
+   * yearly schedule and the index growth scenarios stored in MySQL
+   */
+  async getIndexLinkedPlans(): Promise<IndexLinkedPlansResponse> {
+    const res = await this.request<IndexLinkedPlansResponse>('/index-linked/plans');
+    if (!res.data) {
+      throw new Error('ไม่พบข้อมูลแผนประกันสะสมทรัพย์อินเด็กซ์ลิงก์จากฐานข้อมูล');
+    }
+    return res.data;
+  }
+
+  /**
+   * Calculate the 25-year projection table of an index linked plan
+   */
+  async calculateIndexLinkedQuote(payload: IndexLinkedQuoteRequest): Promise<IndexLinkedQuote> {
+    const res = await this.request<IndexLinkedQuote>('/index-linked/quote', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    if (!res.data) {
+      throw new Error('ไม่พบผลการคำนวณตารางผลประโยชน์จากเซิร์ฟเวอร์');
     }
     return res.data;
   }

@@ -1,13 +1,45 @@
 # Quality Assurance & Test Report
 
 **Project:** OrangeCare Insurance Demo (`insurance-landing-demo`)  
-**Report Date:** 2026-10-24  
+**Report Date:** 2026-10-24 (latest run: 2026-11-02 — index linked savings plans added)  
 **Executed By:** Senior Full-Stack Engineer & QA Engineer  
-**Environment:** Node.js v24.13.0, npm v11.6.2, macOS host (target: Windows / PowerShell / XAMPP)
+**Environment:** Node.js v24.13.0, npm v11.6.2, macOS host, XAMPP MySQL/MariaDB running on port 3306
 
 ---
 
-## 1. Executive Summary
+## 0. Latest Run — Index Linked Savings Plans (25/7 and 25/15)
+
+Feature: new MySQL tables + `/api/v1/index-linked` endpoints + `/index-linked` page that renders a single-page
+25-year benefit projection table (2%, 4%, 6% and the **new 8%** index growth column).
+
+| Suite | Command | Tests | Passed | Failed |
+| :--- | :--- | :---: | :---: | :---: |
+| Backend unit (`dbConfig` + `indexLinked`) | `node --test src/test/dbConfig.test.js src/test/indexLinked.test.js` | 28 | **28** | 0 |
+| Backend end-to-end API (`api.test.js`) | `npm test` | 20 | **20** | 0 |
+| Frontend (vitest) | `cd frontend && npm test` | 19 | **19** | 0 |
+| TypeScript + production build | `cd frontend && npm run build` | 1 | **1** | 0 |
+
+**Verification against the source quotation (sum assured 100,000 / age 30 / PR 100%)**
+
+| Index growth | NG at policy year 7 | NG at policy year 25 | Total NG | IRR |
+| :---: | ---: | ---: | ---: | ---: |
+| 2% | 52,045 | 224,210 | 276,255 | 1.75% |
+| 4% | 110,565 | 583,030 | 693,595 | 3.61% |
+| 6% | 176,260 | 1,152,165 | 1,328,425 | 5.69% |
+| 8% (new) | 249,830 | 2,046,975 | 2,296,805 | 7.95% |
+
+Guaranteed columns also match the quotation exactly: cashback 1,000 THB/year (years 1–24), maturity 700,000 THB,
+total guaranteed 724,000 THB, death benefit 101,000 → 707,000 THB, cash value 3,300 (year 1) → 700,000 THB (year 25).
+The 2%, 4% and 6% columns are byte-identical to the printed table because the index level is rounded to 2 decimals
+before the formula is applied, as the insurer's calculator does.
+
+**API smoke test (live, XAMPP MySQL):** `GET /api/v1/index-linked/plans` → 200; `POST /api/v1/index-linked/quote`
+→ 200 with the table above; validation returns `400` (age band, minimum sum assured, missing plan code) and `404`
+(unknown plan) with Thai messages and no SQL details.
+
+---
+
+## 1. Executive Summary (initial run — 2026-10-24)
 
 | Category | Total | Passed | Failed | Blocked / Pending DB |
 | :--- | :---: | :---: | :---: | :---: |

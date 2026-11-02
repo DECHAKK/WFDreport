@@ -6,6 +6,74 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { QuoteCalculationResult, AGENT_CONTACT_INFO } from './quoteCalculationService';
 
+/**
+ * Capture an element and save it as an A4 PDF (multi page when the element is
+ * taller than one page). Used by the index linked projection table.
+ */
+export async function exportElementToPdf(elementId: string, filenameBase: string): Promise<void> {
+  const element = document.getElementById(elementId);
+  if (!element) {
+    throw new Error('ไม่พบข้อมูลเอกสารสำหรับการพิมพ์ PDF');
+  }
+
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    useCORS: true,
+    logging: false,
+    backgroundColor: '#ffffff',
+    windowWidth: element.scrollWidth,
+  });
+
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
+  const ratio = canvas.width / (pdfWidth - 10);
+  const imgHeight = canvas.height / ratio;
+
+  if (imgHeight <= pdfHeight - 10) {
+    pdf.addImage(imgData, 'PNG', 5, 5, pdfWidth - 10, imgHeight);
+  } else {
+    let heightLeft = imgHeight;
+    let position = 5;
+
+    pdf.addImage(imgData, 'PNG', 5, position, pdfWidth - 10, imgHeight);
+    heightLeft -= pdfHeight;
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 5, position, pdfWidth - 10, imgHeight);
+      heightLeft -= pdfHeight;
+    }
+  }
+
+  pdf.save(`${filenameBase}.pdf`);
+}
+
+/**
+ * Capture an element and download it as a PNG image.
+ */
+export async function exportElementToPng(elementId: string, filenameBase: string): Promise<void> {
+  const element = document.getElementById(elementId);
+  if (!element) {
+    throw new Error('ไม่พบข้อมูลเอกสารสำหรับการบันทึกภาพ');
+  }
+
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    useCORS: true,
+    logging: false,
+    backgroundColor: '#ffffff',
+  });
+
+  const link = document.createElement('a');
+  link.download = `${filenameBase}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
 export async function exportQuoteToPdf(elementId: string, quote: QuoteCalculationResult): Promise<void> {
   const element = document.getElementById(elementId);
   if (!element) {

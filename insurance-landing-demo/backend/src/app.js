@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const healthRoutes = require('./routes/health');
 const planRoutes = require('./routes/plans');
 const rateRoutes = require('./routes/rates');
+const indexLinkedRoutes = require('./routes/indexLinked');
 const leadRoutes = require('./routes/leads');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
 
@@ -54,6 +55,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/health', healthRoutes);
 app.use('/api/v1/plans', planRoutes);
 app.use('/api/v1/rates', rateRoutes);
+app.use('/api/v1/index-linked', indexLinkedRoutes);
 app.use('/api/v1/leads', leadRoutes);
 
 // Error Handling Middlewares

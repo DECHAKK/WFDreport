@@ -6,6 +6,7 @@ import {
   Menu,
   ShieldCheck,
   Sparkles,
+  TrendingUp,
   UserCheck,
   X,
 } from 'lucide-react';
@@ -62,8 +63,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
   const renderSectionLinks = (mobile = false) => NAV_ITEMS.map((item) => {
     const isCurrentHome = !mobile && isHome && item.anchor === 'hero';
     const className = mobile
-      ? 'flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-orange-50 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500'
-      : `rounded-xl px-2.5 xl:px-3 py-2 text-[13px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+      ? 'flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-semibold text-gray-700 transition-colors hover:bg-orange-50 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500'
+      : `rounded-xl px-2.5 xl:px-3.5 py-2.5 text-sm xl:text-[15px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
           isCurrentHome
             ? 'bg-white text-brand-700 shadow-sm'
             : 'text-gray-600 hover:bg-white hover:text-brand-700 hover:shadow-sm'
@@ -103,8 +104,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
 
   const renderConsultationAction = (mobile = false) => {
     const className = mobile
-      ? 'group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-500/25 transition-all hover:from-brand-600 hover:to-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2'
-      : 'group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-4 py-2.5 text-[13px] font-bold text-white shadow-md shadow-brand-500/25 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2';
+      ? 'group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 px-5 py-3.5 text-[15px] font-bold text-white shadow-lg shadow-brand-500/25 transition-all hover:from-brand-600 hover:to-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2'
+      : 'group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-brand-500/25 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2';
     const content = (
       <>
         <span>ขอคำปรึกษาฟรี</span>
@@ -122,9 +123,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
   return (
     <header className="sticky top-0 z-50 border-b border-orange-100/70 bg-white/90 shadow-[0_8px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl">
       <div className="bg-gradient-to-r from-brand-700 via-brand-600 to-amber-500 text-white">
-        <div className="mx-auto flex h-8 max-w-7xl items-center justify-center gap-2 px-4 text-[11px] sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-8 max-w-7xl items-center justify-center gap-2 px-4 text-xs sm:px-6 lg:px-8">
           <Sparkles className="h-3.5 w-3.5 flex-shrink-0 text-orange-100" />
-          <span className="rounded-full border border-white/20 bg-white/20 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.14em]">
+          <span className="rounded-full border border-white/20 bg-white/20 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.12em]">
             โครงการตัวอย่าง
           </span>
           <span className="hidden font-medium text-orange-50 sm:inline">
@@ -149,10 +150,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
               <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-emerald-400" />
             </div>
             <div>
-              <div className="text-[22px] font-extrabold leading-none tracking-[-0.04em] text-gray-900">
+              <div className="text-[23px] font-extrabold leading-none tracking-[-0.04em] text-gray-900">
                 <span>Orange</span><span className="text-brand-500">Care</span>
               </div>
-              <p className="mt-1.5 text-[9px] font-semibold tracking-[0.08em] text-gray-400">
+              <p className="mt-1.5 text-[10px] font-semibold tracking-[0.08em] text-gray-400">
                 ตัวอย่างระบบประกันภัย
               </p>
             </div>
@@ -169,7 +170,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
             <Link
               to="/calculator"
               aria-current={location.pathname === '/calculator' ? 'page' : undefined}
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2.5 text-[13px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+              className={`inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2.5 text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
                 location.pathname === '/calculator'
                   ? 'border-brand-200 bg-orange-100 text-brand-800'
                   : 'border-orange-200/80 bg-orange-50 text-brand-700 hover:border-brand-300 hover:bg-orange-100'
@@ -177,6 +178,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
             >
               <Calculator className="h-4 w-4" />
               <span>คำนวณเบี้ย</span>
+            </Link>
+            <Link
+              to="/index-linked"
+              aria-label="ตารางผลประโยชน์ 25/7 และ 25/15"
+              aria-current={location.pathname === '/index-linked' ? 'page' : undefined}
+              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 xl:px-3.5 py-2.5 text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
+                location.pathname === '/index-linked'
+                  ? 'border-emerald-200 bg-emerald-100 text-emerald-800'
+                  : 'border-emerald-200/80 bg-emerald-50 text-emerald-700 hover:border-emerald-300 hover:bg-emerald-100'
+              }`}
+            >
+              <TrendingUp className="h-4 w-4" />
+              <span className="hidden xl:inline">25/7 · 25/15</span>
             </Link>
             <Link
               to="/admin"
@@ -228,7 +242,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
                 to="/calculator"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-current={location.pathname === '/calculator' ? 'page' : undefined}
-                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-xs font-bold transition-colors ${
+                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3.5 text-[13px] font-bold transition-colors ${
                   location.pathname === '/calculator'
                     ? 'border-brand-300 bg-orange-100 text-brand-800'
                     : 'border-orange-200 bg-orange-50 text-brand-700 hover:bg-orange-100'
@@ -238,10 +252,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
                 <span>คำนวณเบี้ยประกัน</span>
               </Link>
               <Link
+                to="/index-linked"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-current={location.pathname === '/index-linked' ? 'page' : undefined}
+                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3.5 text-[13px] font-bold transition-colors ${
+                  location.pathname === '/index-linked'
+                    ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
+                    : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                }`}
+              >
+                <TrendingUp className="h-4 w-4" />
+                <span>25/7 · 25/15</span>
+              </Link>
+              <Link
                 to="/admin"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-current={location.pathname === '/admin' ? 'page' : undefined}
-                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3 text-xs font-bold transition-colors ${
+                className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-3.5 text-[13px] font-bold transition-colors ${
                   location.pathname === '/admin'
                     ? 'border-brand-300 bg-orange-100 text-brand-800'
                     : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-brand-200 hover:bg-orange-50 hover:text-brand-700'
@@ -255,7 +282,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onConsultClick }) => {
             <div className="mt-3">
               {renderConsultationAction(true)}
             </div>
-            <p className="mt-3 text-center text-[10px] text-gray-400">
+            <p className="mt-3 text-center text-[11px] text-gray-400">
               ต้นแบบเพื่อการศึกษา • ไม่มีการขายหรือเก็บเบี้ยจริง
             </p>
           </nav>

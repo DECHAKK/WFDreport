@@ -295,3 +295,118 @@ Retrieves the complete MySQL-backed rate dataset used by the interactive quotati
 ```
 
 Each gender array contains 100 entries indexed directly by age (0–99). Each whole-life rate set contains the payment terms `10`, `20`, and `90`; values are rates per 1,000 THB of coverage. The arrays above are abridged for readability and are not valid standalone calculation fixtures.
+
+---
+
+### 3.6 Index Linked Savings Plans (25/7 and 25/15)
+
+#### `GET /index-linked/plans`
+Returns the two index-linked savings plans with their 25-year schedule and the index growth scenarios that are rendered as table columns (2%, 4%, 6%, 8%).
+
+**Database prerequisite:** Import `database/004_index_linked_plans.sql`.
+
+**Response `200 OK` (abridged):**
+```json
+{
+  "success": true,
+  "message": "ดึงข้อมูลแผนประกันสะสมทรัพย์อินเด็กซ์ลิงก์สำเร็จ",
+  "data": {
+    "plans": [
+      {
+        "planCode": "SS25_7",
+        "planName": "ประกันสะสมทรัพย์ อินเด็กซ์ลิงก์ 25/7 (แผนตัวอย่าง)",
+        "shortLabel": "25/7",
+        "paymentYears": 7,
+        "coverageYears": 25,
+        "minAge": 1,
+        "maxAge": 75,
+        "minSumAssured": 20000,
+        "seniorAgeThreshold": 71,
+        "seniorMinSumAssured": 150000,
+        "premiumPerThousand": 1000,
+        "annualCashbackPercent": 1,
+        "cashbackYears": 24,
+        "maturityPercent": 700,
+        "deathBenefitPremiumPercent": 101,
+        "participationRate": 100,
+        "ngSplitYear": 7,
+        "expenseRatioPercent": 54.82,
+        "schedule": [
+          { "policyYear": 1, "premiumPerThousand": 1000, "cashbackPercent": 1, "cashValuePerThousand": 33 }
+        ]
+      }
+    ],
+    "scenarios": [
+      { "scenarioCode": "IDX2", "annualIndexChangePercent": 2, "displayOrder": 1 }
+    ]
+  }
+}
+```
+
+#### `POST /index-linked/quote`
+Calculates the full 25-year projection table of one plan variant.
+
+**Request body:**
+```json
+{
+  "planCode": "SS25_7",
+  "gender": "F",
+  "age": 30,
+  "sumAssured": 100000
+}
+```
+
+**Validation rules:**
+- `planCode` must exist in `index_linked_plans` (otherwise `404`).
+- `age` must be an integer within `minAge`–`maxAge` of the plan (`1–75` for 25/7, `1–70` for 25/15).
+- `sumAssured` must be an integer ≥ `minSumAssured` (the senior band applies from age 71 on the 7-year plan, raising the minimum to 150,000 THB) and ≤ 100,000,000.
+- Violations return `400 Bad Request` with a Thai message, no SQL details.
+
+**Response `200 OK` (abridged, sum assured 100,000 / age 30):**
+```json
+{
+  "success": true,
+  "message": "คำนวณตารางผลประโยชน์สำเร็จ",
+  "data": {
+    "annualPremium": 100000,
+    "totalPremium": 700000,
+    "maturityBenefit": 700000,
+    "totalGuaranteedBenefit": 724000,
+    "rows": [
+      {
+        "policyYear": 7,
+        "annualPremium": 100000,
+        "cumulativePremium": 700000,
+        "guaranteedPercent": 1,
+        "guaranteedAmount": 1000,
+        "deathBenefit": 707000,
+        "cashValue": 380800,
+        "nonGuaranteed": { "IDX2": 52045, "IDX4": 110565, "IDX6": 176260, "IDX8": 249830 }
+      }
+    ],
+    "scenarios": [
+      {
+        "scenarioCode": "IDX6",
+        "annualIndexChangePercent": 6,
+        "indexLevelAtSplitYear": 150.36,
+        "indexLevelAtMaturity": 429.19,
+        "ngAtSplitYear": 176260,
+        "ngAtMaturity": 1152165,
+        "totalNonGuaranteed": 1328425,
+        "totalBenefit": 2052425,
+        "benefitMultiple": 2.93,
+        "irrPercent": 5.69
+      }
+    ]
+  }
+}
+```
+
+**Calculation rules**
+- Premium = `sumAssured × premiumPerThousand ÷ 1,000` per year during the payment term (flat for every age and gender).
+- Guaranteed cashback = `annualCashbackPercent` of the sum assured for policy years 1–24; the maturity year pays `maturityPercent` of the sum assured (700% or 1,480%).
+- Death benefit = `deathBenefitPremiumPercent` (101%) of the cumulative premium paid.
+- Non-guaranteed benefit = `50% × cumulative premium × PR × max(indexLevel(t) ÷ 100 − 100%, 0)` where `indexLevel(t) = round(100 × (1 + g)^t, 2)` and `g` is the scenario growth. It is never negative and is paid only in the split year (7 or 15) and in policy year 25.
+- `irrPercent` is solved by bisection on the yearly cash flows (premiums at the start of each payment year, payouts at year end).
+- The values above reproduce the source quotation table exactly for the 2%, 4% and 6% columns; 8% is added by this demo.
+

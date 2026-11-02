@@ -47,7 +47,8 @@ insurance-landing-demo/
 ├── database/                     # MariaDB / MySQL (XAMPP Compatible)
 │   ├── 001_create_schema.sql     # Database schema & core tables
 │   ├── 002_seed_demo_data.sql    # Hypothetical demo seed data
-│   └── 003_calculator_rates.sql  # Calculator settings and complete rate tables
+│   ├── 003_calculator_rates.sql  # Calculator settings and complete rate tables
+│   └── 004_index_linked_plans.sql # Index linked savings plans (25/7, 25/15) + 25-year schedules
 │
 ├── docs/                         # Detailed Technical Documentation
 │   ├── ARCHITECTURE.md           # Architecture diagrams & component responsibilities
@@ -68,12 +69,15 @@ insurance-landing-demo/
 ### 1. Database Setup (XAMPP / MariaDB)
 1. Start MySQL in XAMPP Control Panel.
 2. Open `http://localhost/phpmyadmin/`.
-3. In phpMyAdmin, click **Import** and upload all three scripts in order:
+3. In phpMyAdmin, click **Import** and upload all four scripts in order:
    - `database/001_create_schema.sql`
    - `database/002_seed_demo_data.sql`
    - `database/003_calculator_rates.sql`
+   - `database/004_index_linked_plans.sql`
 
    The third script is required for `GET /api/v1/rates` and the interactive calculator. It creates the calculator tables and loads 1,200 whole-life rates, 200 CI50 rates, and four payment-frequency factors.
+
+   The fourth script is required for `GET /api/v1/index-linked/plans` and the `/index-linked` page. It creates two plans (`SS25_7`, `SS25_15`) with a 25-year schedule each and the index growth scenarios 2%, 4%, 6% and 8%.
 
 ### 2. Start Backend API
 ```bash

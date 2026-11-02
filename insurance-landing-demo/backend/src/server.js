@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = require('./app');
-const { checkConnection } = require('./config/db');
+const { checkConnection, describeConnectionTarget } = require('./config/db');
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 
@@ -13,13 +13,14 @@ async function startServer() {
   console.log('----------------------------------------------------');
 
   const dbStatus = await checkConnection();
+  const dbTarget = describeConnectionTarget();
   if (dbStatus.isConnected) {
-    console.log('✅ Connected to MariaDB/MySQL database successfully.');
+    console.log(`✅ Connected to MariaDB/MySQL database successfully: ${dbTarget}`);
   } else {
     console.warn('⚠️  Database Connection Notice:');
     console.warn(`   ${dbStatus.message}`);
-    console.warn('   Ensure XAMPP MySQL/MariaDB service is started on port 3306');
-    console.warn('   and database "insurance_landing_demo" is imported.');
+    console.warn(`   Target: ${dbTarget}`);
+    console.warn('   Ensure the database service is running and the target database is imported.');
   }
 
   const server = app.listen(PORT, () => {

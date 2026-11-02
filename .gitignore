@@ -1,0 +1,12 @@
+# Vercel / Node runtime (repo root only — subfolders keep their own rules)
+node_modules/
+.vercel/
+
+# Never commit certificates, client option files or database dumps
+*.pem
+*.cnf
+database/exports/
+insurance-landing-demo/database/exports/
+
+# macOS
+.DS_Store

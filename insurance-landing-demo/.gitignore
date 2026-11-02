@@ -31,3 +31,8 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+
+# Database exports (never commit dumps or certificates)
+database/exports/
+*.pem
+*.cnf

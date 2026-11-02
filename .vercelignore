@@ -1,0 +1,13 @@
+# Files that must never be uploaded to Vercel (and never leave the machine)
+insurance-landing-demo/backend/node_modules
+insurance-landing-demo/frontend/node_modules
+insurance-landing-demo/frontend/dist
+insurance-landing-demo/database/exports
+database/exports
+**/*.pem
+**/*.cnf
+**/.env
+!insurance-landing-demo/frontend/.env.production
+HANDOFF.md
+docs/TH_Brochure_*.pdf
+docs/ตัวอย่าง_sales_illustration*.pdf

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "framework": null,
+  "installCommand": "npm install && cd insurance-landing-demo/frontend && npm ci",
+  "buildCommand": "cd insurance-landing-demo/frontend && npm run build",
+  "outputDirectory": "insurance-landing-demo/frontend/dist",
+  "functions": {
+    "api/index.js": {
+      "memory": 512,
+      "maxDuration": 15,
+      "includeFiles": "insurance-landing-demo/backend/src/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/v1/(.*)", "destination": "/api/index" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
+  ]
+}
